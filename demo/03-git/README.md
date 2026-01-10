@@ -1,6 +1,8 @@
 # Git Demo
 
-This is the history of commands that were demoed in class. It illustrates the collaborative work on two clones (copies) of the same repository. You can simulate this with your neighbor, or on a single computer by cloning the repository into two separate directories.
+This is the history of commands that were demoed in class. It illustrates the collaborative work on two clones (copies) of the same repository. 
+
+If you want to simulate this with your neighbor, invite them as a collaborator to your repo after you have created it on GitHub. See [GitHub's guide on inviting collaborators](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-user-account/managing-access-to-your-personal-repositories/inviting-collaborators-to-a-personal-repository).
 
 ## Setting up on computer 1
 
@@ -80,7 +82,7 @@ git switch main  # and practice.txt is back
 
 Create repo demo-repo on GitHub. Then connect our local repo to it. By convention the remote is referred to as `origin`.
 ```bash
-git remote add origin https://github.com/ksiller/demo-repo.git
+git remote add origin https://github.com/ksiller/demo-repo.git # replace with your url
 git branch -a
 # push our main branch to the remote (referred to as origin) on GitHub
 git push origin main

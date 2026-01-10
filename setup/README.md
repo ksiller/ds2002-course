@@ -49,7 +49,7 @@ The easiest way to get started is to use GitHub Codespaces. You can launch Codes
 5. Wait for the codespace to initialize (this may take a few minutes)
 
 You should see a screen like this:
-![Screenshot of terminal in GitHub Codespaces](/docs/images/codespaces.png)
+![Screenshot of terminal in GitHub Codespaces](../docs/images/codespaces.png)
 
 Once your codespace is ready, you'll have a fully configured development environment in your browser!
 

@@ -2,7 +2,7 @@
 
 The goal of this activity is to familiarize you with scripting in bash. Bash scripting is essential for automating tasks, processing data, orchestrating workflows, and building reusable tools that can save time and reduce errors.
 
-**Instructions**: Work through the examples below in your terminal (Codespace or local), experimenting with each command and its various options. If you encounter an error message, don't be discouraged—errors are learning opportunities. Reach out to your peers or instructor for help when needed, and help each other when you can. 
+> **Note:** Work through the examples below in your terminal (Codespace or local), experimenting with each command and its various options. If you encounter an error message, don't be discouraged—errors are learning opportunities. Reach out to your peers or instructor for help when needed, and help each other when you can. 
 
 If the initial examples feel like a breeze, challenge yourself with activities in the *Advanced Concepts* section and explore the resource links at the end of this post.
 
