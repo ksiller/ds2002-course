@@ -14,7 +14,7 @@ You can use <a href="https://github.com/codespaces/" target="_blank" rel="noopen
 
 ## Instructions:
 
-1. Start up Codespaces: On GitHub go to your forked repository, click the green **Code** button.
+1. Start up Codespaces: On GitHub go to your forked repository, click the blue **Code** button.
    - The course repository is <a href="https://github.com/ksiller/ds2002-course" target="_blank" rel="noopener noreferrer">https://github.com/ksiller/ds2002-course</a>
    - Your personal copy (fork) should be <a href="https://github.com/YOUR_GITHUB_USERNAME/ds2002-course" target="_blank" rel="noopener noreferrer">https://github.com/YOUR_GITHUB_USERNAME/ds2002-course</a>
 2. Select the **Codespaces** tab.
