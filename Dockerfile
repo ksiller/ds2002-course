@@ -1,44 +1,74 @@
-FROM ubuntu:22.04
-LABEL maintainer="Neal Magee <nem2p@virginia.edu>"
+FROM alpine/mongosh:latest
+LABEL maintainer="Karsten Siller <khs3z@virginia.edu>"
 
-ARG DEBIAN_FRONTEND=noninteractive
 ARG USERNAME=myuser
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 ARG GROUPNAME=mygroup
 ENV TZ=America/New_York
 
-# Use apk to install the shadow package
-#RUN apk add --no-cache shadow
-RUN groupadd --gid $USER_GID $GROUPNAME \
-    && useradd --uid $USER_UID --gid $USER_GID -m -s /bin/bash $USERNAME 
-#RUN addgroup -g ${USER_GID} ${GROUPNAME} \
-#    && adduser -G ${GROUPNAME} -u ${USER_UID} ${USERNAME} -D
-RUN apt-get update && apt-get upgrade -y \
-    && apt-get install -y --no-install-recommends sudo \
-    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
-    && chmod 0440 /etc/sudoers.d/$USERNAME \
-    && rm -rf /var/lib/apt/lists/*
+# Install base packages and create user
+RUN apk add --no-cache shadow sudo bash \
+  && if getent group ${USER_GID} >/dev/null 2>&1; then \
+       EXISTING_GROUP=$(getent group ${USER_GID} | cut -d: -f1); \
+       if ! getent passwd ${USERNAME} >/dev/null 2>&1 && ! getent passwd ${USER_UID} >/dev/null 2>&1; then \
+         adduser -G ${EXISTING_GROUP} -u ${USER_UID} ${USERNAME} -D -s /bin/bash; \
+       fi; \
+     else \
+       addgroup -g ${USER_GID} ${GROUPNAME} && \
+       if ! getent passwd ${USERNAME} >/dev/null 2>&1 && ! getent passwd ${USER_UID} >/dev/null 2>&1; then \
+         adduser -G ${GROUPNAME} -u ${USER_UID} ${USERNAME} -D -s /bin/bash; \
+       fi; \
+     fi \
+  && echo "$USERNAME ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
+  && chmod 0440 /etc/sudoers.d/$USERNAME
+
 # Ensure the user is in the docker group for DinD (group will be created by docker-in-docker feature)
-RUN groupadd -f docker && usermod -aG docker $USERNAME
+RUN addgroup -S docker 2>/dev/null || true && \
+    if getent passwd ${USERNAME} >/dev/null 2>&1; then \
+      adduser ${USERNAME} docker || true; \
+    fi
 
-RUN apt-get update && apt-get install -y --no-install-recommends software-properties-common curl \
-  && curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | \
-    gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor \
-  && echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-7.0.list
-
-RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends python3 python3-dev python3-pip nano \
-  git net-tools jq zip unzip dnsutils httpie tzdata wget htop \
-  iputils-ping redis-server apt-transport-https pkg-config \
-  ca-certificates gnupg gcc python3-setuptools libffi-dev \
-  mongodb-org libmysqlclient-dev groff \
-  && apt-get clean autoclean && apt-get autoremove --yes \
-  && rm -rf /var/lib/{apt,dpkg,cache,log}/
-
-# Create python symlink (Ubuntu 22.04 comes with Python 3.10)
-RUN ln -sf /usr/bin/python3 /usr/bin/python \
+# Install system dependencies and tools
+# Essential: Python, build tools, and CLI utilities used in labs/exercises
+RUN apk add --no-cache \
+  python3 py3-pip python3-dev \
+  curl wget git \
+  nano \
+  jq zip unzip \
+  httpie \
+  tzdata \
+  htop \
+  iputils \
+  redis \
+  pkgconfig \
+  ca-certificates \
+  gcc g++ musl-dev \
+  libffi-dev \
+  mariadb-dev \
+  linux-headers \
+  && ln -sf /usr/bin/python3 /usr/bin/python \
   && mkdir -p "/home/host"
+
+# Note: mongosh is already installed in the base alpine/mongosh image
 
 WORKDIR /root
 COPY requirements.txt requirements.txt
-RUN python3 -m pip install --no-cache-dir -r requirements.txt
+
+# Upgrade pip and install build dependencies before installing packages
+# Note: --break-system-packages is needed for Alpine's externally-managed Python (PEP 668)
+# This is safe in Docker containers where we control the environment
+RUN python3 -m pip install --break-system-packages --upgrade pip setuptools wheel
+
+# Install Python packages
+# Install build dependencies for packages that need compilation (matplotlib, pandas, mysqlclient)
+RUN apk add --no-cache --virtual .build-deps \
+  freetype-dev \
+  libpng-dev \
+  openblas-dev \
+  && apk add --no-cache \
+  freetype \
+  libpng \
+  openblas \
+  && python3 -m pip install --break-system-packages --no-cache-dir -r requirements.txt \
+  && apk del .build-deps
