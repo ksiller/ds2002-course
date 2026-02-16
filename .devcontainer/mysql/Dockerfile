@@ -51,6 +51,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
   python3-setuptools \
   libffi-dev \
   mongodb-org \
+  mongodb-atlas \
   mysql-client \
   libmysqlclient-dev \
   groff \
