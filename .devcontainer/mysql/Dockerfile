@@ -1,5 +1,5 @@
 FROM ubuntu:22.04
-LABEL maintainer="Neal Magee <nem2p@virginia.edu>"
+LABEL maintainer="Karsten Siller <khs3z@virginia.edu>"
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG USERNAME=myuser
@@ -27,11 +27,33 @@ RUN apt-get update && apt-get install -y --no-install-recommends software-proper
     gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor \
   && echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-7.0.list
 
-RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends python3 python3-dev python3-pip nano \
-  git net-tools jq zip unzip dnsutils httpie tzdata wget htop \
-  iputils-ping redis-server apt-transport-https pkg-config \
-  ca-certificates gnupg gcc python3-setuptools libffi-dev \
-  mongodb-org libmysqlclient-dev groff \
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
+  python3 \
+  python3-dev \
+  python3-pip \
+  nano \
+  git net-tools \
+  jq \
+  zip \
+  unzip \
+  dnsutils \
+  httpie \
+  tzdata \
+  wget \
+  htop \
+  iputils-ping \
+  redis-server \ 
+  apt-transport-https \
+  pkg-config \
+  ca-certificates \
+  gnupg \
+  gcc \
+  python3-setuptools \
+  libffi-dev \
+  mongodb-org \
+  mysql-client \
+  libmysqlclient-dev \
+  groff \
   && apt-get clean autoclean && apt-get autoremove --yes \
   && rm -rf /var/lib/{apt,dpkg,cache,log}/
 
