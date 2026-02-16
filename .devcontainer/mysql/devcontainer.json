@@ -6,7 +6,7 @@
 	// Sets the run context to one level up instead of the .devcontainer folder.
     "build": {
         "dockerfile": "./Dockerfile",
-		"context": "..",
+		"context": "../../",
 		"args": {
 			"USERNAME": "vscode",
 			"GROUPNAME": "ds2002",
