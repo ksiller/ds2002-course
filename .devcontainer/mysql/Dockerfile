@@ -18,14 +18,10 @@ RUN apt-get update && apt-get upgrade -y \
     && apt-get install -y --no-install-recommends sudo \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME \
+    && apt-get autoremove -y && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 # Ensure the user is in the docker group for DinD (group will be created by docker-in-docker feature)
 RUN groupadd -f docker && usermod -aG docker $USERNAME
-
-RUN apt-get update && apt-get install -y --no-install-recommends software-properties-common curl \
-  && curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | \
-    gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor \
-  && echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-7.0.list
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
   python3 \
@@ -50,11 +46,8 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
   gnupg \
   gcc \
   libffi-dev \
-  mongodb-org \
-  mongodb-atlas \
   mysql-client \
   libmysqlclient-dev \
-  groff \
   && apt-get clean autoclean && apt-get autoremove --yes \
   && rm -rf /var/lib/{apt,dpkg,cache,log}/
 
