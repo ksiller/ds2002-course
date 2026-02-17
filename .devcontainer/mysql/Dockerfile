@@ -31,6 +31,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
   python3 \
   python3-dev \
   python3-pip \
+  python3-setuptools \
   nano \
   git net-tools \
   jq \
@@ -48,7 +49,6 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
   ca-certificates \
   gnupg \
   gcc \
-  python3-setuptools \
   libffi-dev \
   mongodb-org \
   mongodb-atlas \

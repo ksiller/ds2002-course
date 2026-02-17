@@ -20,7 +20,7 @@
         "docker-compose.yml"
     ],
     "service": "app", // The name of the service to use as the primary codespace container
-    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+    //"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 
     // Set *default* container specific settings.json values on container create.
     "customizations": {
@@ -45,7 +45,7 @@
 	// ],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [8000, 8888],
+	"forwardPorts": [8000, 8888, 88, 6033],
 
 	"containerEnv": {
     	"MY_CONTAINER_VAR": "some-value-here"
