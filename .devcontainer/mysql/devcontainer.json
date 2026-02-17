@@ -1,35 +1,46 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.163.1/containers/docker-existing-dockerfile
 {
-	"name": "DS2002 Course Container (standard)",
+    "name": "DS2002 Databases",
 
-	// Sets the run context to one level up instead of the .devcontainer folder.
+    // Sets the run context to one level up instead of the .devcontainer folder.
     "build": {
-        "dockerfile": "./Dockerfile",
-		"context": "../../",
-		"args": {
-			"USERNAME": "vscode",
-			"GROUPNAME": "ds2002",
-			"USER_UID": "1000",
-			"USER_GID": "1000",
-			"NODE_ENV": "development"
-		}
-	},
+        //"dockerfile": "./Dockerfile",
 
-	// Set *default* container specific settings.json values on container create.
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"ms-python.vscode-pylance",
-				"ms-toolsai.jupyter",
-				"eamodio.gitlens",
-				"redhat.vscode-yaml",
-				"ms-azuretools.vscode-docker"
-			]
-		}
-	},
+        "dockerComposeFile": [
+            "./docker-compose.yml"
+        ],
 
-	// Set the remote user to vscode to avoid issues with the default user (root)
+        "context": "../../",
+        "args": {
+            "USERNAME": "vscode",
+            "GROUPNAME": "ds2002",
+            "USER_UID": "1000",
+            "USER_GID": "1000",
+            "NODE_ENV": "development"
+        }
+    },
+//        "name": "Custom Docker Compose Codespace",
+//        "dockerComposeFile": [
+//           "docker-compose.yml"
+//        ],
+    "service": "app", // The name of the service to use as the primary codespace container
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+
+    // Set *default* container specific settings.json values on container create.
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.vscode-pylance",
+                "ms-toolsai.jupyter",
+                "eamodio.gitlens",
+                "redhat.vscode-yaml",
+                "ms-azuretools.vscode-docker"
+	    ]
+	}
+    },
+
+    // Set the remote user to vscode to avoid issues with the default user (root)
     "remoteUser": "vscode",
 	// Add the IDs of extensions you want installed when the container is created.
 	// "runArgs": ["--env-file",".devcontainer/devcontainer.env"],

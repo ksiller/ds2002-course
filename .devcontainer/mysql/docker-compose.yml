@@ -1,0 +1,31 @@
+services:
+  app:
+    build:
+      context: ../../ # Refers to the current directory (.devcontainer)
+      dockerfile: Dockerfile # Refers to the Dockerfile in the same directory
+    volumes:
+      - ../../:/workspaces/${localWorkspaceFolderBasename} # Mounts your project files
+    depends_on:
+      - db
+    command: /bin/sh -c "while sleep 1000; do :; done"    
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}  # This is injected from GitHub Secrets in codespace and in local environment you need to create a file named .env and save your passord for the database service
+    ports:
+      - "6033:3306"
+    volumes:
+      - data:/var/lib/mysql
+      - ./workspace:/workspace
+  phpmyadmin:
+    image: phpmyadmin
+    depends_on:
+      - db
+    restart: always
+    ports:
+      - '88:80'
+    environment:
+      PMA_HOST: db
+volumes:
+  data:
