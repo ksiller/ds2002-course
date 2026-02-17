@@ -1,8 +1,8 @@
 services:
   app:
     build:
-      context: ../../ # Refers to the current directory (.devcontainer)
-      dockerfile: .devcontainer/mysql/Dockerfile # Refers to the Dockerfile in the same directory
+      context: ../../ # Refers to the top level directory; need to find the requirements.txt file in the top level directory
+      dockerfile: .devcontainer/mysql/Dockerfile # Refers to the Dockerfile in the mysql directory
       args:
         USERNAME: "vscode"
         GROUPNAME: "ds2002"
@@ -12,9 +12,9 @@ services:
     #volumes:
     #  - ../../:/workspaces/${localWorkspaceFolderBasename} # Mounts your project files
     depends_on:
-      - db
+      - dbhost
     command: /bin/sh -c "while sleep 1000; do :; done"    
-  db:
+  dbhost:
     image: mysql:8.0
     restart: always
     environment:
@@ -27,11 +27,11 @@ services:
   phpmyadmin:
     image: phpmyadmin
     depends_on:
-      - db
+      - dbhost
     restart: always
     ports:
       - "88:80"
     environment:
-      PMA_HOST: db
+      PMA_HOST: dbhost
 volumes:
   data:
