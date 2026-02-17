@@ -3,6 +3,12 @@ services:
     build:
       context: ../../ # Refers to the current directory (.devcontainer)
       dockerfile: Dockerfile # Refers to the Dockerfile in the same directory
+      args:
+        USERNAME: "vscode"
+        GROUPNAME: "ds2002"
+        USER_UID: 1000
+        USER_GID: 1000
+        NODE_ENV: "development"
     volumes:
       - ../../:/workspaces/${localWorkspaceFolderBasename} # Mounts your project files
     depends_on:
@@ -24,7 +30,7 @@ services:
       - db
     restart: always
     ports:
-      - '88:80'
+      - "88:80"
     environment:
       PMA_HOST: db
 volumes:
